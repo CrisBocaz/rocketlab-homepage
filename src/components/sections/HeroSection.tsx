@@ -107,33 +107,45 @@ export const HeroSection: React.FC = () => {
 };
 
 const OrbitalElements: React.FC = () => {
-  const items = ['01 Descubrimos', '02 Diseñamos', '03 Construimos', '04 Escalamos'];
+  const items = [
+    { label: '01', title: 'Descubrimos' },
+    { label: '02', title: 'Diseñamos' },
+    { label: '03', title: 'Construimos' },
+    { label: '04', title: 'Escalamos' },
+  ];
 
   return (
-    <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+    <div className="absolute inset-0 flex items-center justify-center pointer-events-none overflow-hidden">
       {items.map((item, index) => {
-        const angle = (index / items.length) * Math.PI * 2;
-        const x = Math.cos(angle) * 120;
-        const y = Math.sin(angle) * 120;
+        const angle = (index / items.length) * Math.PI * 2 - Math.PI / 2;
+        const radius = 200;
+        const x = Math.cos(angle) * radius;
+        const y = Math.sin(angle) * radius;
 
         return (
           <motion.div
             key={index}
-            className="absolute"
+            className="absolute flex flex-col items-center"
+            initial={{ opacity: 0 }}
             animate={{
-              rotate: 360,
+              opacity: 1,
+              x: [x, x],
+              y: [y, y],
+            }}
+            transition={{
+              x: { duration: 20, repeat: Infinity, ease: 'linear' },
+              y: { duration: 20, repeat: Infinity, ease: 'linear' },
+              opacity: { duration: 0.6 },
+            }}
+            style={{
               x: x,
               y: y,
             }}
-            transition={{
-              rotate: { duration: 20, repeat: Infinity, ease: 'linear' },
-              x: { duration: 0 },
-              y: { duration: 0 },
-            }}
           >
-            <div className="bg-gold/30 border border-gold rounded-full px-3 py-1 text-xs font-display text-gold whitespace-nowrap">
-              {item}
+            <div className="bg-gold/20 border border-gold/40 rounded-full w-12 h-12 flex items-center justify-center">
+              <span className="text-xs font-bold text-gold">{item.label}</span>
             </div>
+            <p className="text-xs text-gold/60 mt-2 whitespace-nowrap">{item.title}</p>
           </motion.div>
         );
       })}
